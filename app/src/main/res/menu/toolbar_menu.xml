@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_item_refresh"
+        android:title="刷新"
+        android:icon="@drawable/ic_refresh_white_24dp"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_item_place"
+        android:icon="@drawable/ic_place_white_24dp"
+        android:title="选择城市"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/menu_item_exit"
+        android:title="退出应用"
+        app:showAsAction="never"/>
+
+</menu>

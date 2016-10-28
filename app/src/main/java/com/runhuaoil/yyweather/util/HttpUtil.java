@@ -16,7 +16,7 @@ import java.net.URL;
 
 public class HttpUtil {
 
-    public static void sendHttpRequest(final String address, final HttpCallBack callBack){
+    public synchronized static void sendHttpRequest(final String address, final HttpCallBack callBack){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -32,7 +32,7 @@ public class HttpUtil {
                     connection.setRequestMethod("GET");
                     connection.connect();
                     if (connection.getResponseCode() == 200){
-                        Log.d("Test","SuccessConncet");
+                        //Log.d("Test","SuccessConncet");
                         inputStream = connection.getInputStream();
 
                         StringBuilder builder = new StringBuilder();

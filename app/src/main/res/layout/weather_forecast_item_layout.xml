@@ -1,0 +1,97 @@
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/weather_forecast_card_view"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="4dp"
+    card_view:cardElevation="3dp"
+    card_view:cardCornerRadius="6dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/fore_date_text_view"
+                android:layout_width="100dp"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="7dp"
+                android:text="27日星期四"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="100dp"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="7dp"
+                >
+
+                <TextView
+                    android:id="@+id/fore_low_temp_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:text="26℃"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:text=" ~ "
+                    />
+
+                <TextView
+                    android:id="@+id/fore_high_temp_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:text="31℃"
+                    />
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/fore_weather_type_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:gravity="right"
+                android:layout_marginRight="50dp"
+                android:textSize="17sp"
+                android:text="晴"
+
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/fore_wind_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="17sp"
+            android:gravity="center"
+            android:text="无持续风向 微风级"/>
+
+    </LinearLayout>
+
+
+
+
+</android.support.v7.widget.CardView>

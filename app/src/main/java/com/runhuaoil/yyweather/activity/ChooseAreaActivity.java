@@ -1,6 +1,7 @@
 package com.runhuaoil.yyweather.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -184,7 +185,7 @@ public class ChooseAreaActivity extends AppCompatActivity implements CardViewOnC
                     public void run() {
                         closeProgressDialog();
                         Snackbar.make(view, "加载失败,请检查网络连接", Snackbar.LENGTH_LONG)
-                                .setAction("再试一次", new View.OnClickListener() {
+                                .setAction("刷新", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         switch (currentLevel){
@@ -242,7 +243,11 @@ public class ChooseAreaActivity extends AppCompatActivity implements CardViewOnC
                 queryCounty();
                 break;
             case LEVEL_COUNTY:
-
+                String county_name = countyList.get(position).getCountyName();
+                Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
+                intent.putExtra("county_name", county_name);
+                startActivity(intent);
+                finish();
                 break;
         }
 
