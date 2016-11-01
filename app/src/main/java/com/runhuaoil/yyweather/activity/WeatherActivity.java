@@ -4,6 +4,8 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -18,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.runhuaoil.yyweather.R;
@@ -50,6 +53,13 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weather_activity_layout);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //getWindow().setNavigationBarColor(Color.TRANSPARENT);
+            getWindow().setNavigationBarColor(Color.rgb(41, 149, 233));
+        }
+
         view = findViewById(R.id.weather_main_layout);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.weather_toolbar_id);
@@ -245,5 +255,6 @@ public class WeatherActivity extends AppCompatActivity {
         }
         return false;
     }
+
 
 }

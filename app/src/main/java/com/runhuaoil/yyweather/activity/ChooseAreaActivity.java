@@ -3,6 +3,8 @@ package com.runhuaoil.yyweather.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -72,6 +74,10 @@ public class ChooseAreaActivity extends AppCompatActivity implements CardViewOnC
             return;
         }
         setContentView(R.layout.choose_activity_layout);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(Color.rgb(41, 149, 233));
+        }
 
         weatherDB = WeatherDB.getInstance(this);
 
