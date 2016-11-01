@@ -3,6 +3,7 @@ package com.runhuaoil.yyweather.dataAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,8 +63,8 @@ public class WeatherInfoRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             todayViewHolder.currentTempText.setText(sharedPre.getString("currentTemp","")  +"℃");
             todayViewHolder.publishText.setText(sharedPre.getString("pulishTime","") + "发布");
 
-            todayViewHolder.highTempText.setText(sharedPre.getString("highTemp" + position,"").split(" ")[1]);
-            todayViewHolder.lowTempText.setText(sharedPre.getString("lowTemp" + position,"").split(" ")[1]);
+            todayViewHolder.highTempText.setText(sharedPre.getString("highTemp" + position, "  ").split(" ")[1]);
+            todayViewHolder.lowTempText.setText(sharedPre.getString("lowTemp" + position, "  ").split(" ")[1]);
             todayViewHolder.todayWeatherTypeText.setText(sharedPre.getString("weatherType" + position, ""));
             todayViewHolder.todayWindText.setText(sharedPre.getString("windDir" + position, "") + " " + sharedPre.getString("windPower" + position, ""));
             todayViewHolder.todayText.setText("今天 " + todayYearMonth + sharedPre.getString("date" + position, ""));
@@ -71,8 +72,8 @@ public class WeatherInfoRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             ForecastViewHolder forecastViewHolder = (ForecastViewHolder) holder;
 
             forecastViewHolder.forecastDayText.setText(sharedPre.getString("date" + position, ""));
-            forecastViewHolder.highTempText.setText(sharedPre.getString("highTemp" + position, "").split(" ")[1]);
-            forecastViewHolder.lowTempText.setText(sharedPre.getString("lowTemp" + position, "").split(" ")[1]);
+            forecastViewHolder.highTempText.setText(sharedPre.getString("highTemp" + position, "  ").split(" ")[1]);
+            forecastViewHolder.lowTempText.setText(sharedPre.getString("lowTemp" + position, "  ").split(" ")[1]);
             forecastViewHolder.weatherTypeText.setText(sharedPre.getString("weatherType" + position, ""));
             forecastViewHolder.windTypeText.setText(sharedPre.getString("windDir" + position, "") + " " + sharedPre.getString("windPower" + position, ""));
         }

@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.runhuaoil.yyweather.R;
@@ -28,8 +27,11 @@ import com.runhuaoil.yyweather.dataAdapter.WeatherInfoRecyclerViewAdapter;
 import com.runhuaoil.yyweather.service.AutoUpdateService;
 import com.runhuaoil.yyweather.util.HttpCallBack;
 import com.runhuaoil.yyweather.util.HttpUtil;
+import com.runhuaoil.yyweather.util.MySharedPreferences;
 import com.runhuaoil.yyweather.util.ResponseHandle;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 
@@ -75,20 +77,31 @@ public class WeatherActivity extends AppCompatActivity {
         weatherRecyclerView.setItemAnimator(new DefaultItemAnimator());
         weatherRecyclerView.setAdapter(weatherAdapter);
         
+        SharedPreferences pre = MySharedPreferences.getInstance(this);
+
         selectCountyName = getIntent().getStringExtra("county_name");
         if (!TextUtils.isEmpty(selectCountyName)){
             queryWeatherInfo(selectCountyName);
             queryPublishTime(selectCountyName, NO_REFRESH_TYPE);
-        }else {
-            queryTimeIsOK = true;
-            queryWeatherIsOK = true;
-            showWeatherInfo();
+        }else{
+            if (pre.getBoolean("city_selected", false)){
+                queryTimeIsOK = true;
+                queryWeatherIsOK = true;
+                showWeatherInfo();
+            }else{
+                Toast.makeText(this, "未选择城市,请重新选择", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
 
     private void queryWeatherInfo(final String countyName) {
-        String address = "http://wthrcdn.etouch.cn/weather_mini?city=" + countyName;
+        String address = null;
+        try {
+            address = "http://wthrcdn.etouch.cn/weather_mini?city=" + URLEncoder.encode(countyName,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         HttpUtil.sendHttpRequest(address, new HttpCallBack() {
             @Override
             public void onFinish(String responseData) {
@@ -127,7 +140,12 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     private void queryPublishTime(final String countyName, final int type) {
-        String address = "http://wthrcdn.etouch.cn/WeatherApi?city=" + countyName;
+        String address = null;
+        try {
+            address = "http://wthrcdn.etouch.cn/WeatherApi?city=" + URLEncoder.encode(countyName,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         HttpUtil.sendHttpRequest(address, new HttpCallBack() {
             @Override
             public void onFinish(String responseData) {
@@ -235,7 +253,6 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     private void showWeatherInfo() {
-
         if (queryTimeIsOK && queryWeatherIsOK){
             weatherAdapter.refreshData(5);
             queryTimeIsOK = false;

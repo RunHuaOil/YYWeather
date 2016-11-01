@@ -14,6 +14,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -283,6 +284,7 @@ public class ChooseAreaActivity extends AppCompatActivity implements CardViewOnC
             queryProvince();
         }else {
             if (isFromWeatherActivity) {
+
                 Intent intent = new Intent(this, WeatherActivity.class);
                 startActivity(intent);
             }

@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+
 /**
  * Created by RunHua on 2016/10/19.
  */
@@ -25,6 +26,7 @@ public class HttpUtil {
                 BufferedReader reader = null;
                 try{
                     URL url = new URL(address);
+
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setDoInput(true);
                     connection.setConnectTimeout(8000);
