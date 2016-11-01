@@ -2,15 +2,14 @@ package com.runhuaoil.yyweather.dataAdapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.runhuaoil.yyweather.R;
+import com.runhuaoil.yyweather.util.MySharedPreferences;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,7 +28,7 @@ public class WeatherInfoRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
     private String[] today;
 
     public WeatherInfoRecyclerViewAdapter(Context context) {
-        sharedPre = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPre = MySharedPreferences.getInstance(context);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d", Locale.CHINA);
         String nowDate = sdf.format(new Date());
         today = nowDate.split("月");
@@ -144,6 +143,7 @@ public class WeatherInfoRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
     }
 
     public void refreshData(int displayNumber){
+
         this.displayNumber = displayNumber;
         notifyDataSetChanged();
     }

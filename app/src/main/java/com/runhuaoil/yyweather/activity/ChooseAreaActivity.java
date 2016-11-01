@@ -2,6 +2,8 @@ package com.runhuaoil.yyweather.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -55,11 +57,22 @@ public class ChooseAreaActivity extends AppCompatActivity implements CardViewOnC
 
     private int currentLevel = -1;//记录当前处于哪个阶段，用于 Back 键后退判定;SnackBar的OnClick获取当前该更新哪个;RecycleView回调 onClick 判定下一步做什么
 
+    private boolean isFromWeatherActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isFromWeatherActivity = getIntent().getBooleanExtra("isFromWeatherActivity", false);
+
+        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(this);
+        if (pre.getBoolean("city_selected", false) && !isFromWeatherActivity){
+            Intent intent = new Intent(this, WeatherActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
         setContentView(R.layout.choose_activity_layout);
+
         weatherDB = WeatherDB.getInstance(this);
 
 
@@ -184,7 +197,7 @@ public class ChooseAreaActivity extends AppCompatActivity implements CardViewOnC
                     @Override
                     public void run() {
                         closeProgressDialog();
-                        Snackbar.make(view, "加载失败,请检查网络连接", Snackbar.LENGTH_LONG)
+                        Snackbar.make(view, "加载失败,请检查网络连接", Snackbar.LENGTH_INDEFINITE)
                                 .setAction("刷新", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -244,6 +257,7 @@ public class ChooseAreaActivity extends AppCompatActivity implements CardViewOnC
                 break;
             case LEVEL_COUNTY:
                 String county_name = countyList.get(position).getCountyName();
+
                 Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
                 intent.putExtra("county_name", county_name);
                 startActivity(intent);
@@ -262,6 +276,10 @@ public class ChooseAreaActivity extends AppCompatActivity implements CardViewOnC
             textView.setText("请选择地区");
             queryProvince();
         }else {
+            if (isFromWeatherActivity) {
+                Intent intent = new Intent(this, WeatherActivity.class);
+                startActivity(intent);
+            }
             finish();
         }
     }

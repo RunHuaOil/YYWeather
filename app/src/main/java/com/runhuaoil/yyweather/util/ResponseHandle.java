@@ -2,7 +2,6 @@ package com.runhuaoil.yyweather.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -63,7 +62,6 @@ public class ResponseHandle {
         return false;
 
     }
-
 
     public static boolean handleCityData(String response, WeatherDB db, int provId ){
         JSONObject jsonObject = null;
@@ -163,13 +161,14 @@ public class ResponseHandle {
     }
 
     public static void saveWeatherInfo( String currentTemp, String countyName, List<WeatherInfo> weatherInfosList, Context context) {
-        SharedPreferences sharedPre = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sharedPre.edit();
 
+
+        SharedPreferences.Editor editor = MySharedPreferences.getEditor(context);
+        //Log.d("Test", "saveWeatherInfo editor  : " + editor);
         editor.putString("currentTemp", currentTemp);
         editor.putBoolean("city_selected", true);
         editor.putString("countyName", countyName);
-
+        // Log.d("Test", "saveWeatherInfo Thread  : " + Thread.currentThread().getId() );
         for (int i = 0; i < weatherInfosList.size(); i++){
             WeatherInfo info = weatherInfosList.get(i);
             //名称有 0 结尾的是当天的天气
@@ -181,7 +180,7 @@ public class ResponseHandle {
             editor.putString("weatherType" + i, info.gettype());
 
         }
-        editor.commit();
+        editor.apply();
 
     }
 
@@ -200,10 +199,11 @@ public class ResponseHandle {
                         String nodeName = parser.getName();
                         if ("updatetime".equals(nodeName)) {
                             String pulishTime = parser.nextText();
-
-                            SharedPreferences.Editor editor= PreferenceManager.getDefaultSharedPreferences(context).edit();
+                            //Log.d("Test", "handlePulishTime Thread  : " + Thread.currentThread().getId() );
+                            SharedPreferences.Editor editor= MySharedPreferences.getEditor(context);
+                            //Log.d("Test", "handlePulishTime editor  : " + editor);
                             editor.putString("pulishTime", pulishTime);
-                            editor.commit();
+                            editor.apply();
                             return true;
                         }
                         break;
@@ -219,8 +219,6 @@ public class ResponseHandle {
         }
 
     }
-
-
 
 
 }

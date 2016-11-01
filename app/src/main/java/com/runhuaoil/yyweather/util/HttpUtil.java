@@ -16,7 +16,7 @@ import java.net.URL;
 
 public class HttpUtil {
 
-    public synchronized static void sendHttpRequest(final String address, final HttpCallBack callBack){
+    public static void sendHttpRequest(final String address, final HttpCallBack callBack){
         new Thread(new Runnable() {
             @Override
             public void run() {
