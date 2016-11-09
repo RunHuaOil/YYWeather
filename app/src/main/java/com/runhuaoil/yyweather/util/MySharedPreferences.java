@@ -6,12 +6,12 @@ import android.preference.PreferenceManager;
 
 /**
  * Created by RunHua on 2016/10/31.
+ * 封装 getDefaultSharedPreferences 方法，返回同一个 SharedPreferences，减少资源浪费
  */
 
 public class MySharedPreferences {
 
     private static SharedPreferences pre;
-    private static SharedPreferences.Editor editor;
 
     private MySharedPreferences(){
 
@@ -22,17 +22,6 @@ public class MySharedPreferences {
             pre = PreferenceManager.getDefaultSharedPreferences(context);
         }
         return pre;
-    }
-
-    public synchronized static SharedPreferences.Editor getEditor(Context context){
-        if (editor == null){
-            if (pre == null){
-                editor = getInstance(context).edit();
-            }else {
-                editor = pre.edit();
-            }
-        }
-        return editor;
     }
 
 }

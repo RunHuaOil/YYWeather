@@ -3,7 +3,6 @@ package com.runhuaoil.yyweather.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -26,16 +25,22 @@ import java.util.List;
 
 /**
  * Created by RunHua on 2016/10/25.
+ * 处理网络请求返回的信息
+ * handleProvinceData() 处理省份信息及保存到数据库
+ * handleCityData()     处理城市信息及保存到数据库
+ * handleCountyData()   处理区县信息及保存到数据库
+ * handleWeatherData()  处理天气信息，以及通过 saveWeatherInfo() 保存信息到 SharePreferences
+ * handlePublishTime()  处理天气信息，获取天气的发布时间
  */
 
 public class ResponseHandle {
 
     public static boolean handleProvinceData(String response, WeatherDB db){
-        JSONObject jsonObject = null;
+        JSONObject jsonObject;
         if (!TextUtils.isEmpty(response)){
             try {
                 jsonObject = new JSONObject(response);
-               // Log.d("Test",jsonObject.toString());
+                // Log.d("Test",jsonObject.toString());
                 Iterator<String> it = jsonObject.keys();
                 String provCode;
                 String provName;
@@ -49,9 +54,6 @@ public class ResponseHandle {
                     province.setProvName(provName);
 
                     db.saveProvinces(province);
-
-//                Log.d("Test", provCode);
-//                Log.d("Test",jsonObject.getString(provCode) );
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -64,7 +66,7 @@ public class ResponseHandle {
     }
 
     public static boolean handleCityData(String response, WeatherDB db, int provId ){
-        JSONObject jsonObject = null;
+        JSONObject jsonObject;
         if (!TextUtils.isEmpty(response)){
             try {
                 jsonObject = new JSONObject(response);
@@ -84,8 +86,6 @@ public class ResponseHandle {
 
                     db.saveCity(city);
 
-//                Log.d("Test", provCode);
-//                Log.d("Test",jsonObject.getString(provCode) );
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -97,7 +97,7 @@ public class ResponseHandle {
     }
 
     public static boolean handleCountyData(String response, WeatherDB db, int cityId){
-        JSONObject jsonObject = null;
+        JSONObject jsonObject;
         if (!TextUtils.isEmpty(response)){
             try {
                 jsonObject = new JSONObject(response);
@@ -117,8 +117,6 @@ public class ResponseHandle {
 
                     db.saveCounty(county);
 
-//                Log.d("Test", provCode);
-//                Log.d("Test",jsonObject.getString(provCode) );
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -160,11 +158,11 @@ public class ResponseHandle {
 
     }
 
-    public static void saveWeatherInfo( String currentTemp, String countyName, List<WeatherInfo> weatherInfosList, Context context) {
+    private static void saveWeatherInfo(String currentTemp, String countyName, List<WeatherInfo> weatherInfosList, Context context) {
 
 
-        SharedPreferences.Editor editor = MySharedPreferences.getEditor(context);
-        //Log.d("Test", "saveWeatherInfo editor  : " + editor);
+        SharedPreferences.Editor editor = MySharedPreferences.getInstance(context).edit();
+
         editor.putString("currentTemp", currentTemp);
         editor.putBoolean("city_selected", true);
         editor.putString("countyName", countyName);
@@ -184,7 +182,7 @@ public class ResponseHandle {
 
     }
 
-    public static boolean handlePulishTime(String response, Context context){
+    public static boolean handlePublishTime(String response, Context context){
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             XmlPullParser parser = factory.newPullParser();
@@ -199,9 +197,8 @@ public class ResponseHandle {
                         String nodeName = parser.getName();
                         if ("updatetime".equals(nodeName)) {
                             String pulishTime = parser.nextText();
-                            //Log.d("Test", "handlePulishTime Thread  : " + Thread.currentThread().getId() );
-                            SharedPreferences.Editor editor= MySharedPreferences.getEditor(context);
-                            //Log.d("Test", "handlePulishTime editor  : " + editor);
+
+                            SharedPreferences.Editor editor= MySharedPreferences.getInstance(context).edit();
                             editor.putString("pulishTime", pulishTime);
                             editor.apply();
                             return true;
@@ -219,6 +216,5 @@ public class ResponseHandle {
         }
 
     }
-
 
 }

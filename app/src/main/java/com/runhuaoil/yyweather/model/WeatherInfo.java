@@ -2,6 +2,7 @@ package com.runhuaoil.yyweather.model;
 
 /**
  * Created by RunHua on 2016/10/27.
+ * WeatherInfo Bean
  */
 
 public class WeatherInfo {

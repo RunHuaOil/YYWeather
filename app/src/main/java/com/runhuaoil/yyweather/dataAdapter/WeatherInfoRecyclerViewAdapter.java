@@ -3,7 +3,6 @@ package com.runhuaoil.yyweather.dataAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,18 +17,26 @@ import java.util.Locale;
 
 /**
  * Created by RunHua on 2016/10/27.
+ * WeatherActivity中 RecyclerView Adapter的实现
+ * 主要根据当前系统日期，来选择使用哪种布局
+ * RecyclerView.Adapter 根据 getItemViewType() 来决定 Item 要显示的布局
+ * RecyclerView.Adapter 根据 getItemCount() 来决定要显示的 Item 数目
  */
 
 public class WeatherInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    //以下两个值是 getItemViewType()的返回值，决定使用哪种布局
     private static final int TODAY_ITEM = 1;
     private static final int FORECAST_ITEM = 2;
+
     private SharedPreferences sharedPre;
-    private int displayNumber = 0;
+    private int displayNumber = 0;//要显示的 Item 数目
     private String[] today;
+    private Context mContext;
 
     public WeatherInfoRecyclerViewAdapter(Context context) {
-        sharedPre = MySharedPreferences.getInstance(context);
+        this.mContext = context;
+        sharedPre = MySharedPreferences.getInstance(mContext);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d", Locale.CHINA);
         String nowDate = sdf.format(new Date());
         today = nowDate.split("月");
@@ -60,8 +67,10 @@ public class WeatherInfoRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             TodayViewHolder todayViewHolder = (TodayViewHolder) holder;
 
             todayViewHolder.cityName.setText(sharedPre.getString("countyName",""));
-            todayViewHolder.currentTempText.setText(sharedPre.getString("currentTemp","")  +"℃");
-            todayViewHolder.publishText.setText(sharedPre.getString("pulishTime","") + "发布");
+            todayViewHolder.currentTempText.setText(mContext.getString(R.string.tempMark, sharedPre.getString("currentTemp","")));
+            todayViewHolder.publishText.setText(mContext.getString(R.string.publishTimeMark, sharedPre.getString("pulishTime","")));
+//            todayViewHolder.currentTempText.setText(sharedPre.getString("currentTemp","")  +"℃");
+//            todayViewHolder.publishText.setText(sharedPre.getString("pulishTime","") + "发布");
 
             todayViewHolder.highTempText.setText(sharedPre.getString("highTemp" + position, "  ").split(" ")[1]);
             todayViewHolder.lowTempText.setText(sharedPre.getString("lowTemp" + position, "  ").split(" ")[1]);
@@ -98,18 +107,18 @@ public class WeatherInfoRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     }
 
-    public class TodayViewHolder extends RecyclerView.ViewHolder{
+    private class TodayViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView todayText;
-        public TextView publishText;
-        public TextView currentTempText;
-        public TextView highTempText;
-        public TextView lowTempText;
-        public TextView todayWeatherTypeText;
-        public TextView todayWindText;
-        public TextView cityName;
+        TextView todayText;
+        TextView publishText;
+        TextView currentTempText;
+        TextView highTempText;
+        TextView lowTempText;
+        TextView todayWeatherTypeText;
+        TextView todayWindText;
+        TextView cityName;
 
-        public TodayViewHolder(View itemView) {
+        TodayViewHolder(View itemView) {
             super(itemView);
             todayText = (TextView)itemView.findViewById(R.id.today_date_text_view);
             publishText = (TextView)itemView.findViewById(R.id.publish_text_view);
@@ -123,16 +132,16 @@ public class WeatherInfoRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         }
     }
 
-    public class ForecastViewHolder extends RecyclerView.ViewHolder{
+    private class ForecastViewHolder extends RecyclerView.ViewHolder{
 
 
-        public TextView forecastDayText;
-        public TextView windTypeText;
-        public TextView weatherTypeText;
-        public TextView highTempText;
-        public TextView lowTempText;
+        TextView forecastDayText;
+        TextView windTypeText;
+        TextView weatherTypeText;
+        TextView highTempText;
+        TextView lowTempText;
 
-        public ForecastViewHolder(View itemView) {
+        ForecastViewHolder(View itemView) {
             super(itemView);
             forecastDayText = (TextView)itemView.findViewById(R.id.fore_date_text_view);
             lowTempText = (TextView)itemView.findViewById(R.id.fore_low_temp_text);
@@ -144,7 +153,6 @@ public class WeatherInfoRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
     }
 
     public void refreshData(int displayNumber){
-
         this.displayNumber = displayNumber;
         notifyDataSetChanged();
     }

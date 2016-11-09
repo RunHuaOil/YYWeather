@@ -2,6 +2,7 @@ package com.runhuaoil.yyweather.model;
 
 /**
  * Created by RunHua on 2016/10/25.
+ * City Bean
  */
 
 public class City {

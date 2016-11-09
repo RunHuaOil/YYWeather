@@ -14,12 +14,13 @@ import java.util.List;
 
 /**
  * Created by RunHua on 2016/10/25.
+ * 该类用来 存储 获取 地点数据
  */
 
 public class WeatherDB {
 
-    public static final int DB_VERSION = 1;
-    public static final String DB_NAME = "YYWeatherArea";
+    private static final int DB_VERSION = 1;
+    private static final String DB_NAME = "YYWeatherArea";
 
     private SQLiteDatabase db;
     private static WeatherDB weatherDB;
@@ -47,26 +48,6 @@ public class WeatherDB {
 
     }
 
-    public List<Province> loadProvinces(){
-        List<Province> provList = new ArrayList<>();
-        Cursor cursor = db.query("Province", null, null, null, null, null, null);
-        if (cursor.moveToFirst()){
-
-            do {
-                Province province = new Province();
-                province.setDbId(cursor.getInt(cursor.getColumnIndex("id")));
-                province.setProveCode(cursor.getString(cursor.getColumnIndex("province_code")));
-                province.setProvName(cursor.getString(cursor.getColumnIndex("province_name")));
-                cursor.getColumnIndex("province_name");
-                provList.add(province);
-            }while (cursor.moveToNext());
-
-
-        }
-
-        return provList;
-    }
-
     public void saveCity(City city){
         if (city != null){
             ContentValues values = new ContentValues();
@@ -77,6 +58,36 @@ public class WeatherDB {
         }
 
     }
+
+    public void saveCounty(County county){
+        if (county != null){
+            ContentValues values = new ContentValues();
+            values.put("county_name",county.getCountyName());
+            values.put("county_code",county.getCountyCode());
+            values.put("city_id",county.getCityId());
+            db.insert("County", null, values);
+        }
+    }
+
+    public List<Province> loadProvinces(){
+        List<Province> provList = new ArrayList<>();
+        Cursor cursor = db.query("Province", null, null, null, null, null, null);
+        if (cursor.moveToFirst()){
+
+            do {
+                Province province = new Province();
+                province.setDbId(cursor.getInt(cursor.getColumnIndex("id")));
+                province.setProveCode(cursor.getString(cursor.getColumnIndex("province_code")));
+                province.setProvName(cursor.getString(cursor.getColumnIndex("province_name")));
+                provList.add(province);
+            }while (cursor.moveToNext());
+
+        }
+        cursor.close();
+        return provList;
+    }
+
+
 
     public List<City> loadCities(int provId){
         List<City> cityList = new ArrayList<>();
@@ -96,21 +107,11 @@ public class WeatherDB {
             }while (cursor.moveToNext());
 
         }
-
-
-
+        cursor.close();
         return cityList;
     }
 
-    public void saveCounty(County county){
-        if (county != null){
-            ContentValues values = new ContentValues();
-            values.put("county_name",county.getCountyName());
-            values.put("county_code",county.getCountyCode());
-            values.put("city_id",county.getCityId());
-            db.insert("County", null, values);
-        }
-    }
+
 
     public List<County> loadCounties(int cityId){
         List<County> countyList = new ArrayList<>();
@@ -126,8 +127,7 @@ public class WeatherDB {
                 countyList.add(county);
             }while(cursor.moveToNext());
         }
-
-
+        cursor.close();
         return countyList;
     }
 }

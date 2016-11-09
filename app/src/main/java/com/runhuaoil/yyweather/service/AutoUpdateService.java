@@ -10,18 +10,21 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.runhuaoil.yyweather.receiver.AutoUpdateReceiver;
 import com.runhuaoil.yyweather.util.HttpCallBack;
 import com.runhuaoil.yyweather.util.HttpUtil;
 import com.runhuaoil.yyweather.util.MySharedPreferences;
 import com.runhuaoil.yyweather.util.ResponseHandle;
+import com.runhuaoil.yyweather.util.UpdateUtil;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 
 /**
  * Created by RunHua on 2016/10/31.
+ *  后台更新服务
  */
 
 public class AutoUpdateService extends Service {
@@ -34,7 +37,6 @@ public class AutoUpdateService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
-
 
     @Override
     public void onCreate() {
@@ -50,13 +52,13 @@ public class AutoUpdateService extends Service {
             }
         }).start();
 
-        alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        long lifeTime = SystemClock.elapsedRealtime() + 6 * 60 * 60 * 1000;
+        //更新间隔
+        long lifeTime = SystemClock.elapsedRealtime() + 2 * 60 * 60 * 1000;
 
         Intent i = new Intent(this, AutoUpdateReceiver.class);
         pi = PendingIntent.getBroadcast(this, 0, i,0);
 
+        alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, lifeTime, pi);
 
         return super.onStartCommand(intent, flags, startId);
@@ -66,33 +68,8 @@ public class AutoUpdateService extends Service {
         SharedPreferences pre = MySharedPreferences.getInstance(this);
         String countyName = pre.getString("countyName", "");
 
-        if (!TextUtils.isEmpty(countyName)){
-            String address1 = "http://wthrcdn.etouch.cn/weather_mini?city=" + countyName;
-            HttpUtil.sendHttpRequest(address1, new HttpCallBack() {
-                @Override
-                public void onFinish(String responseData) {
-                    ResponseHandle.handleWeatherData(responseData, AutoUpdateService.this);
-                }
+        UpdateUtil.getWeatherData(countyName, this, null);
 
-                @Override
-                public void onError(Exception e) {
-                    //Toast.makeText(AutoUpdateService.this, "后台更新天气失败", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            String address2 = "http://wthrcdn.etouch.cn/WeatherApi?city=" + countyName;
-            HttpUtil.sendHttpRequest(address2, new HttpCallBack() {
-                @Override
-                public void onFinish(String responseData) {
-                    ResponseHandle.handlePulishTime(responseData, AutoUpdateService.this);
-                }
-
-                @Override
-                public void onError(Exception e) {
-                    //Toast.makeText(AutoUpdateService.this, "后台更新天气失败", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
     }
 
     @Override

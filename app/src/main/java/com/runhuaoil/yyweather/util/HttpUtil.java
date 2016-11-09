@@ -1,8 +1,5 @@
 package com.runhuaoil.yyweather.util;
 
-
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +10,7 @@ import java.net.URL;
 
 /**
  * Created by RunHua on 2016/10/19.
+ * 封装 HttpURLConnection 网络请求
  */
 
 public class HttpUtil {
@@ -22,7 +20,7 @@ public class HttpUtil {
             @Override
             public void run() {
                 HttpURLConnection connection = null;
-                InputStream inputStream = null;
+                InputStream inputStream;
                 BufferedReader reader = null;
                 try{
                     URL url = new URL(address);
@@ -34,7 +32,7 @@ public class HttpUtil {
                     connection.setRequestMethod("GET");
                     connection.connect();
                     if (connection.getResponseCode() == 200){
-                        //Log.d("Test","SuccessConncet");
+                        //Log.d("Test","SuccessConnect");
                         inputStream = connection.getInputStream();
 
                         StringBuilder builder = new StringBuilder();
