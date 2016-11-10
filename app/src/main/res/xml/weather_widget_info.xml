@@ -5,7 +5,7 @@
     android:minHeight="40dp"
     android:minWidth="110dp"
     android:previewImage="@drawable/weather_widget_preview"
-    android:updatePeriodMillis="2700000"
+    android:updatePeriodMillis="10800000"
     android:widgetCategory="home_screen">
 
 </appwidget-provider>

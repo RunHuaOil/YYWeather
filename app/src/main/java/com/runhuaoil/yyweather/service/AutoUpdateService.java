@@ -9,17 +9,12 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 import com.runhuaoil.yyweather.receiver.AutoUpdateReceiver;
-import com.runhuaoil.yyweather.util.HttpCallBack;
-import com.runhuaoil.yyweather.util.HttpUtil;
 import com.runhuaoil.yyweather.util.MySharedPreferences;
-import com.runhuaoil.yyweather.util.ResponseHandle;
 import com.runhuaoil.yyweather.util.UpdateUtil;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+
 
 
 /**
@@ -53,13 +48,13 @@ public class AutoUpdateService extends Service {
         }).start();
 
         //更新间隔
-        long lifeTime = SystemClock.elapsedRealtime() + 2 * 60 * 60 * 1000;
+        long lifeTime = SystemClock.elapsedRealtime() + 6 * 60 * 60 * 1000;
 
         Intent i = new Intent(this, AutoUpdateReceiver.class);
         pi = PendingIntent.getBroadcast(this, 0, i,0);
 
         alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, lifeTime, pi);
+        alarmMgr.set(AlarmManager.ELAPSED_REALTIME, lifeTime, pi);
 
         return super.onStartCommand(intent, flags, startId);
     }
